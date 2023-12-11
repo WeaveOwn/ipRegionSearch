@@ -31,7 +31,16 @@
             <version>1.2.83</version>
         </dependency>
     </dependencies>
-
+    <distributionManagement>
+        <repository>
+            <id>kxlRelease</id>
+            <url>http://nexus.kingxunlian.com/nexus/content/repositories/release</url>
+        </repository>
+        <snapshotRepository>
+            <id>kxlSnapshot</id>
+            <url>http://nexus.kingxunlian.com/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
     <build>
         <plugins>
             <plugin>

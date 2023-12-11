@@ -22,6 +22,7 @@ import java.util.List;
  **/
 @Slf4j
 public class IPSearcher implements IPSearchConstant {
+
     private static final Object LOCK = new Object();
     private static boolean memory_mode_load = false;
     /**
@@ -36,6 +37,12 @@ public class IPSearcher implements IPSearchConstant {
      * the original db binary string
      */
     private static byte[] dataRegion = null;
+
+    private static String filePath = SEARCH_DB;
+
+    public static void setFilePath(String path) {
+        filePath = path + "/" +SEARCH_DB;
+    }
 
     /**
      * memorySearch ip
@@ -111,12 +118,12 @@ public class IPSearcher implements IPSearchConstant {
      */
     private static void loadFileToMemoryMode() {
         if (GZIP) {
-            GZipUtils.decompress(ByteUtil.getPath(SEARCH_DB + GZipUtils.EXT), false);
+            GZipUtils.decompress(filePath + GZipUtils.EXT, false);
         }
         RandomAccessFile raf = null;
         try {
             long sTime = System.currentTimeMillis();
-            raf = new RandomAccessFile(new File(ByteUtil.getPath(SEARCH_DB)), "r");
+            raf = new RandomAccessFile(new File(filePath), "r");
             byte[] headBlock = new byte[HEAD_BLOCK_LENGTH];
             raf.seek(0L);
             raf.readFully(headBlock, 0, HEAD_BLOCK_LENGTH);
@@ -143,7 +150,7 @@ public class IPSearcher implements IPSearchConstant {
         } finally {
             ByteUtil.ezIOClose(raf);
             if (GZIP) {
-                ByteUtil.fileDel(ByteUtil.getPath(SEARCH_DB));
+                ByteUtil.fileDel(filePath);
             }
         }
 
